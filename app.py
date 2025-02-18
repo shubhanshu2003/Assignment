@@ -9,7 +9,7 @@ app = Flask(__name__)
 def htop_view():
     now = datetime.datetime.now(datetime.timezone.utc).astimezone(datetime.timezone(datetime.timedelta(hours=5, minutes=30)))  # IST
     name = "Your Full Name"  # Replace with your actual name
-    username = os.getenv('USER', 'Unknown')  # More reliable way to get the username
+    username = os.getenv('USER', 'Unknown')  # More reliable than os.getlogin()
     server_time = now.strftime("%Y-%m-%d %H:%M:%S IST")
 
     try:
@@ -18,7 +18,7 @@ def htop_view():
         top_output = "top command not found. Please install it (sudo apt-get install procps)."
     except subprocess.CalledProcessError as e:
         top_output = f"Error executing top: {e}"
-    except Exception as e:  # Catch any other potential errors
+    except Exception as e:
         top_output = f"An unexpected error occurred: {e}"
 
     html = f"""
@@ -38,4 +38,4 @@ def htop_view():
     return html
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)  # Ensure host is '0.0.0.0'
+    app.run(debug=True, host='0.0.0.0', port=5000)  # Run on port 5000
